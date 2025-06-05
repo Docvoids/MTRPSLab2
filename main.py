@@ -61,7 +61,8 @@ class CharList:
         return new_list
 
     def reverse(self) -> None:
-        pass
+        """Операцію обернення списку."""
+        self._data.reverse()
 
     def findFirst(self, element: str) -> int:
         pass
