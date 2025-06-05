@@ -101,12 +101,28 @@ class CharList:
     def deleteAll(self, element: str) -> None:
         """Метод видаляє зі списку усі елементи, які за значенням відповідають шуканому."""
         self._validate_char(element)
-        self._data = [item for item in self._data if item != element]
+        if self.tail is None:
+            return
+
+        temp_storage = []
+        current = self.tail.next
+        for _ in range(self.size):
+            if current.data != element:
+                temp_storage.append(current.data)
+            current = current.next
+
+        # Зберігаємо оригінальний розмір, щоб знати, чи були зміни
+        # original_size = self.size
+
+        self.clear()  # Очищаємо поточний список (скидає self.tail та self.size)
+        for char_val in temp_storage:
+            self.append(char_val)  # append оновить self.size і self.tail
 
     def get(self, index: int) -> str:
         """Операцію отримання елементу списку на довільній позиції."""
-        self._validate_index(index, allow_append_pos=False)
-        return self._data[index]
+        self._validate_index_bounds(index, for_insert=False)
+        node = self._get_node_at(index)
+        return node.data
 
     def clone(self) -> 'CharList':
         """Операцію копіювання списку."""
