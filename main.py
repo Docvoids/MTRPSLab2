@@ -184,14 +184,21 @@ class CharList:
 
     def clear(self) -> None:
         """Операцію очищення списку."""
-        self._data.clear()
+        self.tail = None
+        self.size = 0
 
     def extend(self, elements: 'CharList') -> None:
         """Операцію розширення списку."""
         if not isinstance(elements, CharList):
             raise TypeError("Can only extend with another CharList instance.")
-        for i in range(elements.length()):
-            self.append(elements.get(i))
+
+        if elements.length() == 0 or elements.tail is None:  # Додаткова перевірка на elements.tail
+            return
+
+        current_other = elements.tail.next
+        for _ in range(elements.length()):
+            self.append(current_other.data)
+            current_other = current_other.next
 
     def __str__(self) -> str: # Оновимо для кільцевого списку
         if self.tail is None:
