@@ -40,7 +40,9 @@ class CharList:
         self._data.insert(index, element)
 
     def delete(self, index: int) -> str:
-        pass
+        """Операцію видалення елементу зі списку на вказаній позиції."""
+        self._validate_index(index, allow_append_pos=False)
+        return self._data.pop(index)
 
     def deleteAll(self, element: str) -> None:
         pass
