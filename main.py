@@ -59,13 +59,44 @@ class CharList:
     def insert(self, element: str, index: int) -> None:
         """Операцію вставки елементу на довільну позицію у списку."""
         self._validate_char(element)
-        self._validate_index(index, allow_append_pos=True)
-        self._data.insert(index, element)
+        # Валідація індексу для insert дозволяє index == self.size
+        self._validate_index_bounds(index, for_insert=True)
+
+        if index == self.size:  # Вставка в кінець (або в порожній список на позицію 0)
+            self.append(element)
+            return
+
+        new_node = self._Node(element)
+        if index == 0:  # Вставка на початок (список не порожній)
+            new_node.next = self.tail.next
+            self.tail.next = new_node
+        else:  # Вставка в середину
+            prev_node = self._get_node_at(index - 1)
+            new_node.next = prev_node.next
+            prev_node.next = new_node
+        self.size += 1
 
     def delete(self, index: int) -> str:
         """Операцію видалення елементу зі списку на вказаній позиції."""
-        self._validate_index(index, allow_append_pos=False)
-        return self._data.pop(index)
+        self._validate_index_bounds(index, for_insert=False)
+
+        deleted_data: str
+        if self.size == 1:
+            deleted_data = self.tail.data
+            self.tail = None
+        elif index == 0:
+            head = self.tail.next
+            deleted_data = head.data
+            self.tail.next = head.next
+        else:
+            prev_node = self._get_node_at(index - 1)
+            node_to_delete = prev_node.next
+            deleted_data = node_to_delete.data
+            prev_node.next = node_to_delete.next
+            if node_to_delete == self.tail:
+                self.tail = prev_node
+        self.size -= 1
+        return deleted_data
 
     def deleteAll(self, element: str) -> None:
         """Метод видаляє зі списку усі елементи, які за значенням відповідають шуканому."""
