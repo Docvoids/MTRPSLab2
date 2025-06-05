@@ -50,7 +50,9 @@ class CharList:
         self._data = [item for item in self._data if item != element]
 
     def get(self, index: int) -> str:
-        pass
+        """Операцію отримання елементу списку на довільній позиції."""
+        self._validate_index(index, allow_append_pos=False)
+        return self._data[index]
 
     def clone(self) -> 'CharList':
         pass
