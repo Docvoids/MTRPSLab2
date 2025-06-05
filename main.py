@@ -38,14 +38,23 @@ class CharList:
         for _ in range(index):
             current = current.next
         return current
+
     def length(self) -> int:
         """Операцію визначення довжини списку."""
-        return len(self._data)
+        return self.size
 
     def append(self, element: str) -> None:
         """Операцію додавання елементу в кінець списку."""
         self._validate_char(element)
-        self._data.append(element)
+        new_node = self._Node(element)
+        if self.tail is None:
+            self.tail = new_node
+            new_node.next = new_node
+        else:
+            new_node.next = self.tail.next
+            self.tail.next = new_node
+            self.tail = new_node
+        self.size += 1
 
     def insert(self, element: str, index: int) -> None:
         """Операцію вставки елементу на довільну позицію у списку."""
