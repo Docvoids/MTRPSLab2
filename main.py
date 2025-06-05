@@ -25,7 +25,8 @@ class CharList:
             raise IndexError(error_message)
 
     def length(self) -> int:
-        pass
+        """Операцію визначення довжини списку."""
+        return len(self._data)
 
     def append(self, element: str) -> None:
         pass
