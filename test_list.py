@@ -1,5 +1,5 @@
 import unittest
-from custom_list import CharList # Припускаємо, що custom_list.py містить CircularLinkedList реалізацію
+from main import CharList # Припускаємо, що custom_list.py містить CircularLinkedList реалізацію
 
 class TestCharListCircularLinked(unittest.TestCase):
 
