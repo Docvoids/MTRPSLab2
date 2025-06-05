@@ -55,7 +55,10 @@ class CharList:
         return self._data[index]
 
     def clone(self) -> 'CharList':
-        pass
+        """Операцію копіювання списку."""
+        new_list = CharList()
+        new_list._data = self._data[:]
+        return new_list
 
     def reverse(self) -> None:
         pass
