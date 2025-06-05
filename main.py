@@ -159,18 +159,28 @@ class CharList:
     def findFirst(self, element: str) -> int:
         """Операцію пошуку елемента за значенням з голови списку."""
         self._validate_char(element)
-        try:
-            return self._data.index(element)
-        except ValueError:
+        if self.tail is None:
             return -1
 
-    def findLast(self, element: str) -> int:
-        """Операцію пошуку елемента за значенням з хвоста списку."""
-        self._validate_char(element)
-        for i in range(len(self._data) - 1, -1, -1):
-            if self._data[i] == element:
+        current = self.tail.next
+        for i in range(self.size):
+            if current.data == element:
                 return i
+            current = current.next
         return -1
+
+    def findLast(self, element: str) -> int:
+        self._validate_char(element)
+        if self.tail is None:
+            return -1
+
+        last_found_index = -1
+        current = self.tail.next
+        for i in range(self.size):
+            if current.data == element:
+                last_found_index = i
+            current = current.next
+        return last_found_index
 
     def clear(self) -> None:
         """Операцію очищення списку."""
