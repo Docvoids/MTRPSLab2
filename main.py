@@ -45,7 +45,9 @@ class CharList:
         return self._data.pop(index)
 
     def deleteAll(self, element: str) -> None:
-        pass
+        """Метод видаляє зі списку усі елементи, які за значенням відповідають шуканому."""
+        self._validate_char(element)
+        self._data = [item for item in self._data if item != element]
 
     def get(self, index: int) -> str:
         pass
