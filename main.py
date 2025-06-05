@@ -29,7 +29,9 @@ class CharList:
         return len(self._data)
 
     def append(self, element: str) -> None:
-        pass
+        """Операцію додавання елементу в кінець списку."""
+        self._validate_char(element)
+        self._data.append(element)
 
     def insert(self, element: str, index: int) -> None:
         pass
