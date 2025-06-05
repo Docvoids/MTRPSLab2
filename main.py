@@ -127,12 +127,34 @@ class CharList:
     def clone(self) -> 'CharList':
         """Операцію копіювання списку."""
         new_list = CharList()
-        new_list._data = self._data[:]
+        if self.tail is None:
+            return new_list
+
+        current = self.tail.next
+        for _ in range(self.size):
+            new_list.append(current.data)
+            current = current.next
         return new_list
 
     def reverse(self) -> None:
         """Операцію обернення списку."""
-        self._data.reverse()
+        if self.size < 2:
+            return
+
+        previous_node = self.tail  # Старий хвіст
+        current_node = self.tail.next  # Стара голова
+        new_tail_candidate = self.tail.next  # Стара голова стане новим хвостом
+
+        for _ in range(self.size):
+            next_node_temp = current_node.next  # Зберігаємо наступний вузол
+            current_node.next = previous_node  # Реверсуємо вказівник поточного вузла
+            previous_node = current_node  # Рухаємо previous_node вперед
+            current_node = next_node_temp  # Рухаємо current_node вперед
+
+        # Після циклу, previous_node вказує на старий хвіст (який тепер нова голова)
+        # new_tail_candidate (стара голова) тепер має стати новим хвостом
+        self.tail = new_tail_candidate
+        # self.tail.next вже вказує на previous_node (нову голову) через останню ітерацію
 
     def findFirst(self, element: str) -> int:
         """Операцію пошуку елемента за значенням з голови списку."""
