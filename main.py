@@ -1,29 +1,43 @@
 class CharList:
-    def __init__(self):
-        self._data = []  # Внутрішній список Python для зберігання даних
+    class _Node:
+        def __init__(self, data: str, next_node=None):
+            self.data = data
+            self.next = next_node
 
-    def _validate_char(self, element: str):
+    def __init__(self):
+        self.tail = None
+        self.size = 0
+
+    def _validate_char(self, element: str):  # Залишається
         if not isinstance(element, str) or len(element) != 1:
             raise TypeError("Element must be a single character (string of length 1).")
 
-    def _validate_index(self, index: int, allow_append_pos: bool = False):
+    # Перейменовуємо та адаптуємо _validate_index
+    def _validate_index_bounds(self, index: int, for_insert: bool = False):
         if not isinstance(index, int):
             raise TypeError("Index must be an integer.")
 
-        # Визначаємо верхню межу для індексу
-        # Якщо список порожній, upper_bound буде -1 для get/delete, або 0 для insert
-        upper_bound = len(self._data) if allow_append_pos else (len(self._data) - 1 if len(self._data) > 0 else -1)
-
-        if len(self._data) == 0:
-            if allow_append_pos and index == 0:  # Дозволити вставку в порожній список за індексом 0
+        if self.size == 0:
+            if for_insert and index == 0:
                 return
-            # Для get/delete/insert в порожній список (крім index=0 для insert)
             raise IndexError("Index out of range. List is empty.")
 
-        if not (0 <= index <= upper_bound):
-            error_message = f"Index out of range. Must be between 0 and {upper_bound if upper_bound >= 0 else 0}."
-            raise IndexError(error_message)
+        # Верхня межа для insert - це self.size, для інших - self.size - 1
+        upper_bound = self.size if for_insert else self.size - 1
 
+        if not (0 <= index <= upper_bound):
+            # Спеціальне повідомлення, якщо upper_bound < 0 (можливо тільки для порожнього списку і for_insert=False)
+            actual_upper_display = upper_bound if upper_bound >= 0 else 0
+            raise IndexError(f"Index out of range. Must be between 0 and {actual_upper_display}.")
+
+    def _get_node_at(self, index: int) -> _Node:
+        # Цей метод передбачає, що індекс вже валідований
+        # if index < 0 or index >= self.size: # Додаткова внутрішня перевірка, якщо потрібно
+        #      raise IndexError("Internal error: _get_node_at called with invalid index.")
+        current = self.tail.next
+        for _ in range(index):
+            current = current.next
+        return current
     def length(self) -> int:
         """Операцію визначення довжини списку."""
         return len(self._data)
@@ -91,8 +105,17 @@ class CharList:
         for i in range(elements.length()):
             self.append(elements.get(i))
 
-    def __str__(self) -> str:
-        return f"CharList({self._data})"
+    def __str__(self) -> str: # Оновимо для кільцевого списку
+        if self.tail is None:
+            return "CharList([])"
+        items = []
+        current = self.tail.next
+        for _ in range(self.size):
+            items.append(repr(current.data))
+            current = current.next
+        return f"CharList([{', '.join(items)}])"
 
-    def __repr__(self) -> str:
-        return f"CharList({self._data!r})"
+    def __repr__(self) -> str: # Оновимо для кільцевого списку
+        if self.tail is None:
+            return "CharList(empty)"
+        return f"<CharList object with {self.size} elements, tail.data='{self.tail.data}'>"
