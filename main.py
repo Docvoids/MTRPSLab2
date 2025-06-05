@@ -65,16 +65,31 @@ class CharList:
         self._data.reverse()
 
     def findFirst(self, element: str) -> int:
-        pass
+        """Операцію пошуку елемента за значенням з голови списку."""
+        self._validate_char(element)
+        try:
+            return self._data.index(element)
+        except ValueError:
+            return -1
 
     def findLast(self, element: str) -> int:
-        pass
+        """Операцію пошуку елемента за значенням з хвоста списку."""
+        self._validate_char(element)
+        for i in range(len(self._data) - 1, -1, -1):
+            if self._data[i] == element:
+                return i
+        return -1
 
     def clear(self) -> None:
-        pass
+        """Операцію очищення списку."""
+        self._data.clear()
 
     def extend(self, elements: 'CharList') -> None:
-        pass
+        """Операцію розширення списку."""
+        if not isinstance(elements, CharList):
+            raise TypeError("Can only extend with another CharList instance.")
+        for i in range(elements.length()):
+            self.append(elements.get(i))
 
     def __str__(self) -> str:
         return f"CharList({self._data})"
