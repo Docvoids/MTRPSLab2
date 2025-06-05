@@ -34,7 +34,10 @@ class CharList:
         self._data.append(element)
 
     def insert(self, element: str, index: int) -> None:
-        pass
+        """Операцію вставки елементу на довільну позицію у списку."""
+        self._validate_char(element)
+        self._validate_index(index, allow_append_pos=True)
+        self._data.insert(index, element)
 
     def delete(self, index: int) -> str:
         pass
